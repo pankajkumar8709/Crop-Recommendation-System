@@ -1,151 +1,146 @@
-Team(SC1)_5
-
-Team Members: 
-Pankaj Kumar Mahto (Rollno: 24CSE394) (Regd No : 24UG010451)
-Hemalatanaram  (Roll no : 24BCA070)  (Regd No: 24UG040070)
-Jada. Leela Prasanth (Roll No: 24CSE394 ) (Regd No: 24UG010179)
-
-
-
 # 🌱 Data-Driven Crop Advisory System
 
 An AI-powered decision support system for small farm holders that recommends the most suitable crops and fertilizers based on soil and environmental conditions.
 
 ---
 
-# Table of Contents
+## 👥 Team (SC1)_5
 
- Project Overview
- Features
- Tech Stack
- Input Parameters
- How It Works
- Directory Structure
- Sample Data
- Future Scope
- Contact
+- **Pankaj Kumar Mahto**  
+  Roll No: 24CSE394 | Regd No: 24UG010451  
+- **Hemalatanaram**  
+  Roll No: 24BCA070 | Regd No: 24UG040070  
+- **Jada Leela Prasanth**  
+  Roll No: 24CSE394 | Regd No: 24UG010179  
 
 ---
 
-# Project Overview
+## 📌 Table of Contents
 
-The Data-Driven Crop Advisory System is a smart web-based tool designed to help farmers choose the best crop to grow and the right fertilizer to use, based on:
-
-- Soil nutrients: Nitrogen (N), Phosphorus (P), Potassium (K)
-- Soil pH level
-- Weather: Temperature, Humidity, Rainfall
-
-Using machine learning, it delivers personalized recommendations that promote better yield and sustainable farming.
-
-
-# Features
-
- Crop recommendation using ML
- Fertilizer advisory based on NPK levels
- User-friendly Flask web interface
- Environmental parameter input via form
- Data visualizations (charts)
- Local and offline-capable
+- [Project Overview](#project-overview)  
+- [Features](#features)  
+- [Tech Stack](#tech-stack)  
+- [Input Parameters](#input-parameters)  
+- [How It Works](#how-it-works)  
+- [Directory Structure](#directory-structure)  
+- [Sample Data](#sample-data)  
+- [Future Scope](#future-scope)  
+- [Contact](#contact)  
 
 ---
 
-# Tech Stack
+## 📖 Project Overview
 
-| Category      | Tools / Languages        
+The **Data-Driven Crop Advisory System** helps farmers choose the best crop and suitable fertilizer based on:
 
- Frontend       HTML, CSS, JavaScript     
- Backend        Python, Flask             
- ML/AI          scikit-learn, pandas      
- Database       SQLite, CSV               
- Visualization  Matplotlib                  
+- 🌾 Soil Nutrients (N, P, K)  
+- 🧪 Soil pH  
+- 🌤️ Temperature, Humidity, Rainfall  
 
+Using machine learning, it delivers accurate and personalized recommendations for sustainable farming.
 
-# Input Parameters
+---
 
-N: Nitrogen content (kg/ha)
-P:Phosphorus content (kg/ha)
-K: Potassium content (kg/ha)
-pH: Soil pH level
-Temperature**: (°C)
-Humidity: (%)
-Rainfall: (mm)
+## 🚀 Features
 
-# How It Works
+- ✅ Crop recommendation using ML  
+- ✅ Fertilizer advisory based on NPK levels  
+- ✅ User-friendly Flask web interface  
+- ✅ Data visualizations (charts)  
+- ✅ Local/offline-capable system  
 
-1. User enters soil data and weather data.
-2. ML model predicts the best-suited crop.
-3. Based on selected crop and NPK levels, a fertilizer is recommended.
-4. Results are visualized using charts.
+---
 
+## 🧰 Tech Stack
 
+| Category     | Tools/Technologies         |
+|-------------|-----------------------------|
+| Frontend     | HTML, CSS, JavaScript       |
+| Backend      | Python, Flask               |
+| ML/AI        | scikit-learn, pandas        |
+| Database     | SQLite, CSV                 |
+| Visualization| Matplotlib                  |
 
+---
 
-# Directory
+## 🧪 Input Parameters
+
+- **N**: Nitrogen (kg/ha)  
+- **P**: Phosphorus (kg/ha)  
+- **K**: Potassium (kg/ha)  
+- **pH**: Soil pH  
+- **Temperature**: in °C  
+- **Humidity**: in %  
+- **Rainfall**: in mm  
+
+---
+
+## 🔄 How It Works
+
+1. User enters soil and weather data  
+2. ML model predicts best crop  
+3. Fertilizer recommendation based on crop and NPK  
+4. Results shown using charts  
+
+---
+
+## 📁 Directory Structure
+
 CROP_RECOMMENDATION/
 │
-├── data/                           # CSV files for crop & fertilizer
-│   ├── Crop_recommendation.csv
-│   └── fertilizer_recommendation.csv
+├── data/
+│ ├── Crop_recommendation.csv
+│ └── fertilizer_recommendation.csv
 │
-├── myenv/                          # Virtual environment (optional to track)
+├── myenv/ # (Virtual environment - optional)
 │
 ├── notebooks/
-│   └── model_training.ipynb        # Jupyter notebook for training ML model
+│ └── model_training.ipynb
 │
-├── portal/                         # Flask application
-│   ├── __pycache__/
-│   ├── model/
-│   │   └── crop_model.pkl          # Trained ML model
-│   ├── portal/
-│   │   ├── __init__.py
-│   │   └── routes.py               # Main Flask routes
-│   ├── templates/                  # HTML templates
-│   │   ├── home.html
-│   │   ├── index.html
-│   │   └── result.html
-│   └── static/
-│       └── charts/                 # JS/CSS/chart assets
+├── portal/
+│ ├── model/
+│ │ └── crop_model.pkl
+│ ├── portal/
+│ │ └── routes.py
+│ ├── templates/
+│ │ ├── index.html
+│ │ └── result.html
+│ └── static/
+│ └── charts/
 │
-|                        
-│
-├── .gitignore                      # Git ignore file
-├── README.md                       # Project README
-├── requirements.txt                # Python dependencies
-└── run.py                          # App entry point
+├── .gitignore
+├── requirements.txt
+├── README.md
+└── run.py
 
+----
 
-# Sample Data
+## 📊 Sample Data
 
-	N	P	K	temperature	humidity	ph	rainfall	label
-0	90	42	43	20.879744	82.002744	6.502985	202.935536	rice
-1	85	58	41	21.770462	80.319644	7.038096	226.655537	rice
-2	60	55	44	23.004459	82.320763	7.840207	263.964248	rice
-3	74	35	40	26.491096	80.158363	6.980401	242.864034	rice
-4	78	42	42	20.130175	81.604873	7.628473	262.717340	rice
-...	...	...	...	...	...	...	...	...
-2195	107	34	32	26.774637	66.413269	6.780064	177.774507	coffee
-2196	99	15	27	27.417112	56.636362	6.086922	127.924610	coffee
+| N  | P  | K  | Temp (°C) | Humidity (%) | pH  | Rainfall (mm) | Label |
+|----|----|----|-----------|---------------|-----|----------------|--------|
+| 90 | 42 | 43 | 20.87     | 82.00         | 6.50| 202.93         | rice   |
+| 85 | 58 | 41 | 21.77     | 80.31         | 7.03| 226.65         | rice   |
+| 60 | 55 | 44 | 23.00     | 82.32         | 7.84| 263.96         | rice   |
+| 74 | 35 | 40 | 26.49     | 80.15         | 6.98| 242.86         | rice   |
 
+---
 
-# Future Scope
-. Real-Time Weather API Integration
+## 🔮 Future Scope
 
-Fetch live weather data (temperature, humidity, rainfall) using APIs (like OpenWeatherMap, WeatherStack).
-Automatically fill weather fields to reduce manual input and increase accuracy.
+- 🔗 **Real-Time Weather API Integration**  
+  Use APIs like OpenWeatherMap to fetch live weather data.
 
-. IoT-Based Soil Sensor Integration
+- 🌱 **IoT-Based Soil Sensor Integration**  
+  Connect sensors (Raspberry Pi, Arduino) for real-time NPK, moisture, and pH.
 
-Connect physical sensors to fetch real-time soil NPK, moisture, and pH data.
-Use Raspberry Pi or Arduino to send data directly to your app.
+- 💬 **Farmer Feedback Loop**  
+  Collect feedback to improve model performance via retraining.
 
-.Farmer Feedback Loop
+---
 
-Let users rate crop recommendations or suggest corrections.
-Use feedback to retrain models and improve over time.
+## 📞 Contact
 
-
-# Contact
-
-Pankaj Kumar Mahto 
-Phone: 6201511552
-Email: 24cse394.pankajkumarmahto@giet.edu
+**Pankaj Kumar Mahto**  
+📱 6201511552  
+📧 24cse394.pankajkumarmahto@giet.edu  

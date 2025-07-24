@@ -1,9 +1,9 @@
 Team(SC1)_5
 
 Team Members: 
-Pankaj Kumar Mahto
-Hemalatanaram
-Jada. Leela Prasanth
+Pankaj Kumar Mahto (Rollno: 24CSE394) (Regd No : 24UG010451)
+Hemalatanaram  (Roll no : 24BCA070)  (Regd No: 24UG040070)
+Jada. Leela Prasanth (Roll No: 24CSE394 ) (Regd No: 24UG010179)
 
 
 

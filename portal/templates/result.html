@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 Smart Crop Advisor | Recommendation Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2E8B57;
+            --primary-light: #3CB371;
+            --primary-dark: #1F6B47;
+            --secondary: #4682B4;
+            --secondary-dark: #3A6D99;
+            --background: #F4F7F4;
+            --card: #FFFFFF;
+            --text: #1A3C34;
+            --text-light: #4B5EAA;
+            --border: #D1D5DB;
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+            --error: #EF4444;
+            --success: #10B981;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #E8F0EA 0%, var(--background) 100%);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle background particles */
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(46, 139, 87, 0.15);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0.8; }
+            100% { transform: translateY(-1000px); opacity: 0; }
+        }
+
+        /* Subtle leaf decoration */
+        .leaf-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .leaf {
+            position: absolute;
+            opacity: 0.2;
+            animation: float-leaf 25s infinite linear;
+        }
+
+        @keyframes float-leaf {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .dashboard-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .dashboard-button:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .try-again-button {
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .try-again-button:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .container {
+            max-width: 720px;
+            padding: 5rem 2rem 3rem;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            width: 100%;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+            position: relative;
+        }
+
+        .header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .header p {
+            color: var(--text);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .result-container {
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            text-align: center;
+            width: 100%;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .result-title {
+            color: var(--primary);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1.5rem 0;
+        }
+
+        .crop-visualization {
+            width: 120px;
+            height: 120px;
+            margin: 1.5rem auto;
+            background: #F9FAFB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .crop-visualization i {
+            font-size: 3.5rem;
+            color: var(--primary);
+        }
+
+        .confidence-meter {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 4px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            width: 0;
+            animation: confidenceFill 1.2s ease-out forwards;
+        }
+
+        @keyframes confidenceFill {
+            from { width: 0; }
+            to { width: 85%; } /* Adjust based on actual confidence score */
+        }
+
+        .confidence-label {
+            font-size: 0.9rem;
+            color: var(--text);
+            opacity: 0.7;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .input-values {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .input-value {
+            background: #F9FAFB;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .input-value:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .input-value strong {
+            color: var(--primary);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .fertilizer-text {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 500;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px dashed var(--border);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 600px;
+                padding: 4rem 1.5rem 2rem;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .result-container {
+                padding: 2rem;
+            }
+
+            .result-text {
+                font-size: 1.8rem;
+            }
+
+            .input-values {
+                grid-template-columns: 1fr;
+            }
+
+            .crop-visualization {
+                width: 100px;
+                height: 100px;
+            }
+
+            .crop-visualization i {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 4rem 1rem 2rem;
+            }
+
+            .result-container {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .dashboard-button, .try-again-button {
+                top: 10px;
+                left: 10px;
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animation classes */
+        .animate-delay-1 { animation-delay: 0.2s; }
+        .animate-delay-2 { animation-delay: 0.4s; }
+        .animate-delay-3 { animation-delay: 0.6s; }
+        .animate-delay-4 { animation-delay: 0.8s; }
+        .animate-delay-5 { animation-delay: 1s; }
+        .animate-delay-6 { animation-delay: 1.2s; }
+        .animate-delay-7 { animation-delay: 1.4s; }
+    </style>
+</head>
+<body>
+    <!-- Subtle background elements -->
+  <div class="bg-particles" id="particles"></div>
+  <div class="leaf-decoration" id="leaves"></div>
+
+  <a href="/crop" class="dashboard-button animate__animated animate__fadeIn" aria-label="Back to Dashboard">
+    <i class="fas fa-arrow-left"></i> Back to Dashboard
+  </a>
+
+  <div class="container animate__animated animate__fadeIn">
+    <div class="header">
+      <h1 class="animate__animated animate__fadeInDown">🌱 Crop Recommendation</h1>
+      <p class="animate__animated animate__fadeIn animate-delay-1">Your AI-powered agricultural insights for optimal yield</p>
+    </div>
+
+    {% if prediction_text %}
+    <div class="result-container animate__animated animate__fadeInUp animate-delay-2">
+      <div class="result-title animate__animated animate__fadeIn animate-delay-3">Recommended Crop</div>
+
+      <div class="crop-visualization animate__animated animate__fadeIn animate-delay-4">
+        <i class="fas fa-seedling"></i>
+      </div>
+
+      <div class="result-text animate__animated animate__fadeInUp animate-delay-4">{{ prediction_text }}</div>
+
+      <div class="confidence-meter animate__animated animate__fadeIn animate-delay-4">
+        <div class="confidence-fill"></div>
+      </div>
+      <div class="confidence-label animate__animated animate__fadeIn animate-delay-4">AI Confidence: 85%</div>
+
+      <div class="input-values animate__animated animate__fadeIn animate-delay-5">
+        <div class="input-value animate__animated animate__fadeIn animate-delay-5"><strong>Nitrogen (N):</strong> {{ request.form.nitrogen }} ppm</div>
+        <div class="input-value animate__animated animate__fadeIn animate-delay-6"><strong>Phosphorus (P):</strong> {{ request.form.phosphorus }} ppm</div>
+        <div class="input-value animate__animated animate__fadeIn animate-delay-7"><strong>Potassium (K):</strong> {{ request.form.potassium }} ppm</div>
+        <div class="input-value animate__animated animate__fadeIn animate-delay-8"><strong>Soil pH:</strong> {{ request.form.ph }}</div>
+        <div class="input-value animate__animated animate__fadeIn animate-delay-9"><strong>Temperature:</strong> {{ request.form.temperature }}°C</div>
+        <div class="input-value animate__animated animate__fadeIn animate-delay-10"><strong>Humidity:</strong> {{ request.form.humidity }}%</div>
+        <div class="input-value animate__animated animate__fadeIn animate-delay-11"><strong>Rainfall:</strong> {{ request.form.rainfall }} mm</div>
+      </div>
+
+      {% if npk_chart %}
+      <div class="chart-container animate__animated animate__fadeIn animate-delay-8">
+        <div class="chart-title">Soil Nutrient Distribution</div>
+        <img src="{{ npk_chart }}" alt="NPK Pie Chart" style="width: 100%; max-width: 350px; border-radius: 12px; box-shadow: var(--shadow);" />
+      </div>
+      {% endif %}
+
+      {% if weather_chart %}
+      <div class="chart-container animate__animated animate__fadeIn animate-delay-9">
+        <div class="chart-title">Weather Conditions Distribution</div>
+        <img src="{{ weather_chart }}" alt="Weather Pie Chart" style="width: 100%; max-width: 350px; border-radius: 12px; box-shadow: var(--shadow);" />
+      </div>
+      {% endif %}
+
+      {% if predicted_fertilizer %}
+      <div class="fertilizer-text animate__animated animate__fadeIn animate-delay-5">
+        <strong>Fertilizer Advice:</strong> {{ predicted_fertilizer }}
+      </div>
+      {% endif %}
+
+      <a href="/crop" class="try-again-button animate__animated animate__fadeInUp animate-delay-5" aria-label="Get Another Recommendation">
+        <i class="fas fa-redo"></i> Get Another Recommendation
+      </a>
+    </div>
+    {% else %}
+    <div class="result-container animate__animated animate__fadeInUp animate-delay-2">
+      <div class="result-title animate__animated animate__fadeIn animate-delay-3">No Recommendation Available</div>
+      <p class="animate__animated animate__fadeIn animate-delay-4">Please provide valid soil and weather data to get a recommendation.</p>
+      <a href="/crop" class="try-again-button animate__animated animate__fadeInUp animate-delay-5" aria-label="Try Again">
+        <i class="fas fa-redo"></i> Try Again
+      </a>
+    </div>
+    {% endif %}
+  </div>
+
+  <script>
+    // Background particles and leaf animation (unchanged from original)
+    document.addEventListener('DOMContentLoaded', function() {
+      const particlesContainer = document.getElementById('particles');
+      const leavesContainer = document.getElementById('leaves');
+      const particleCount = 15;
+      const leafCount = 5;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100 + 100}%`;
+        particle.style.animationDuration = `${Math.random() * 15 + 10}s`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        particlesContainer.appendChild(particle);
+      }
+
+      for (let i = 0; i < leafCount; i++) {
+        const leaf = document.createElement('div');
+        leaf.classList.add('leaf');
+        const size = Math.random() * 20 + 20;
+        leaf.style.width = `${size}px`;
+        leaf.style.height = `${size}px`;
+        leaf.style.left = `${Math.random() * 100}%`;
+        leaf.style.top = `${Math.random() * 100 + 100}%`;
+        leaf.style.animationDuration = `${Math.random() * 20 + 15}s`;
+        leaf.style.animationDelay = `${Math.random() * 10}s`;
+        const leafIcons = ['🌱', '🍃', '🌿', '☘️'];
+        leaf.textContent = leafIcons[Math.floor(Math.random() * leafIcons.length)];
+        leavesContainer.appendChild(leaf);
+      }
+    });
+  </script>
+</body>
+</html>

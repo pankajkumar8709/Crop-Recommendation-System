@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 Smart Crop Advisor | Precision Agriculture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2E8B57;
+            --primary-light: #3CB371;
+            --primary-dark: #1F6B47;
+            --secondary: #4682B4;
+            --secondary-dark: #3A6D99;
+            --background: #F4F7F4;
+            --card: #FFFFFF;
+            --text: #1A3C34;
+            --text-light: #4B5EAA;
+            --border: #D1D5DB;
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+            --error: #EF4444;
+            --success: #10B981;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --weather-blue: #3B82F6;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #E8F0EA 0%, var(--background) 100%);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle background particles */
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(46, 139, 87, 0.15);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0.8; }
+            100% { transform: translateY(-1000px); opacity: 0; }
+        }
+
+        /* Subtle leaf decoration */
+        .leaf-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .leaf {
+            position: absolute;
+            opacity: 0.2;
+            animation: float-leaf 25s infinite linear;
+        }
+
+        @keyframes float-leaf {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .dashboard-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .dashboard-button:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .container {
+            max-width: 720px;
+            padding: 5rem 2rem 3rem;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            width: 100%;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+            position: relative;
+        }
+
+        .header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .header p {
+            color: var(--text);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            width: 100%;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .form-group .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 6px;
+            color: var(--secondary);
+            cursor: help;
+        }
+
+        .form-group .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--secondary-dark);
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            padding: 8px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        input[type="number"], input[type="range"] {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            box-sizing: border-box;
+            background: #F9FAFB;
+            color: var(--text);
+        }
+
+        input[type="number"]::placeholder {
+            color: var(--text);
+            opacity: 0.6;
+        }
+
+        input[type="number"]:focus, input[type="range"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.15);
+        }
+
+        input[type="range"] {
+            padding: 0;
+            height: 40px;
+            background: transparent;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        input[type="range"]:hover::-webkit-slider-thumb {
+            background: var(--primary-light);
+            transform: scale(1.1);
+        }
+
+        .value-display {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        button[type="submit"]:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        button[type="submit"].loading {
+            cursor: not-allowed;
+            position: relative;
+            background: var(--primary-light);
+        }
+
+        button[type="submit"].loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 3px solid white;
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            right: 15px;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 2rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .soil-info, .weather-info {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .weather-info {
+            border-left-color: var(--weather-blue);
+        }
+
+        .soil-info:hover, .weather-info:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .soil-header, .weather-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .soil-icon, .weather-icon {
+            font-size: 1.8rem;
+            margin-right: 0.75rem;
+            color: var(--primary);
+        }
+
+        .weather-icon {
+            color: var(--weather-blue);
+        }
+
+        .soil-title, .weather-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .soil-data, .weather-data {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .soil-item, .weather-item {
+            padding: 1rem;
+            background: #FFFFFF;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .soil-item:hover, .weather-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .soil-item i, .weather-item i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .weather-item i {
+            color: var(--weather-blue);
+        }
+
+        .soil-item .value, .weather-item .value {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+
+        .soil-item .label, .weather-item .label {
+            font-size: 0.85rem;
+            color: var(--text);
+            opacity: 0.7;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0.8; }
+            100% { transform: translateY(-1000px); opacity: 0; }
+        }
+
+        @keyframes float-leaf {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 600px;
+                padding: 4rem 1.5rem 2rem;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .soil-data, .weather-data {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 4rem 1rem 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .dashboard-button {
+                top: 10px;
+                left: 10px;
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+
+            .form-group .tooltip .tooltip-text {
+                width: 160px;
+                font-size: 0.8rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Subtle background elements -->
+    <div class="bg-particles" id="particles"></div>
+    <div class="leaf-decoration" id="leaves"></div>
+
+    <a href="/" class="dashboard-button animate__animated animate__fadeIn">
+        <i class="fas fa-arrow-left"></i> Dashboard
+    </a>
+
+    <div class="container animate__animated animate__fadeIn">
+        <div class="header">
+            <h1 class="animate__animated animate__fadeInDown">🌱 Smart Crop Advisor</h1>
+            <p class="animate__animated animate__fadeIn animate-delay-1">Optimize your farming with AI-powered crop recommendations</p>
+        </div>
+        
+        <div class="card animate__animated animate__fadeInUp animate-delay-2">
+            <form method="POST" action="/result" id="cropForm">
+                <h2 class="section-title animate__animated animate__fadeIn animate-delay-3">Soil Data</h2>
+                
+                <div class="soil-info animate__animated animate__fadeIn animate-delay-4">
+                    <div class="soil-header">
+                        <i class="fas fa-seedling soil-icon"></i>
+                        <div class="soil-title">Soil Nutrient Analysis</div>
+                    </div>
+                    <div class="soil-data">
+                        <div class="soil-item animate__animated animate__fadeIn animate-delay-5">
+                            <i class="fas fa-atom"></i>
+                            <div class="value" id="display-nitrogen">50 ppm</div>
+                            <div class="label">Nitrogen (N)</div>
+                        </div>
+                        <div class="soil-item animate__animated animate__fadeIn animate-delay-6">
+                            <i class="fas fa-fire"></i>
+                            <div class="value" id="display-phosphorus">50 ppm</div>
+                            <div class="label">Phosphorus (P)</div>
+                        </div>
+                        <div class="soil-item animate__animated animate__fadeIn animate-delay-7">
+                            <i class="fas fa-bolt"></i>
+                            <div class="value" id="display-potassium">50 ppm</div>
+                            <div class="label">Potassium (K)</div>
+                        </div>
+                        <div class="soil-item animate__animated animate__fadeIn animate-delay-8">
+                            <i class="fas fa-flask"></i>
+                            <div class="value" id="display-ph">7.0</div>
+                            <div class="label">Soil pH</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group animate__animated animate__fadeIn animate-delay-5">
+                    <label for="nitrogen">Nitrogen (N) Level <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltip-text">Essential for leaf growth (0-100 ppm)</span></span></label>
+                    <div class="input-container">
+                        <input type="range" id="nitrogen" name="nitrogen" min="0" max="100" value="50" step="1" required aria-label="Nitrogen level">
+                        <span class="value-display" id="nitrogen-value">50</span>
+                    </div>
+                    <div class="error-message" id="nitrogen-error">Please enter a valid nitrogen level (0-100).</div>
+                </div>
+                <div class="form-group animate__animated animate__fadeIn animate-delay-6">
+                    <label for="phosphorus">Phosphorus (P) Level <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltip-text">Supports root development (0-100 ppm)</span></span></label>
+                    <div class="input-container">
+                        <input type="range" id="phosphorus" name="phosphorus" min="0" max="100" value="50" step="1" required aria-label="Phosphorus level">
+                        <span class="value-display" id="phosphorus-value">50</span>
+                    </div>
+                    <div class="error-message" id="phosphorus-error">Please enter a valid phosphorus level (0-100).</div>
+                </div>
+                <div class="form-group animate__animated animate__fadeIn animate-delay-7">
+                    <label for="potassium">Potassium (K) Level <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltip-text">Enhances fruit quality (0-100 ppm)</span></span></label>
+                    <div class="input-container">
+                        <input type="range" id="potassium" name="potassium" min="0" max="100" value="50" step="1" required aria-label="Potassium level">
+                        <span class="value-display" id="potassium-value">50</span>
+                    </div>
+                    <div class="error-message" id="potassium-error">Please enter a valid potassium level (0-100).</div>
+                </div>
+                <div class="form-group animate__animated animate__fadeIn animate-delay-8">
+                    <label for="ph">Soil pH Value <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltip-text">Soil acidity/alkalinity (0-14)</span></span></label>
+                    <div class="input-container">
+                        <input type="range" id="ph" name="ph" min="0" max="14" value="7" step="0.1" required aria-label="Soil pH value">
+                        <span class="value-display" id="ph-value">7.0</span>
+                    </div>
+                    <div class="error-message" id="ph-error">Please enter a valid pH value (0-14).</div>
+                </div>
+
+                <h2 class="section-title animate__animated animate__fadeIn animate-delay-9">Weather Data</h2>
+                
+                <div class="weather-info animate__animated animate__fadeIn animate-delay-10">
+                    <div class="weather-header">
+                        <i class="fas fa-cloud-sun weather-icon"></i>
+                        <div class="weather-title">Weather Conditions</div>
+                    </div>
+                    <div class="weather-data">
+                        <div class="weather-item animate__animated animate__fadeIn animate-delay-11">
+                            <i class="fas fa-temperature-high"></i>
+                            <div class="value" id="display-temperature">25.0°C</div>
+                            <div class="label">Temperature</div>
+                        </div>
+                        <div class="weather-item animate__animated animate__fadeIn animate-delay-12">
+                            <i class="fas fa-tint"></i>
+                            <div class="value" id="display-humidity">65.0%</div>
+                            <div class="label">Humidity</div>
+                        </div>
+                        <div class="weather-item animate__animated animate__fadeIn animate-delay-13">
+                            <i class="fas fa-cloud-rain"></i>
+                            <div class="value" id="display-rainfall">100.0mm</div>
+                            <div class="label">Rainfall</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group animate__animated animate__fadeIn animate-delay-11">
+                    <label for="temperature">Temperature (°C) <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltip-text">Average daily temperature</span></span></label>
+                    <input type="number" id="temperature" name="temperature" placeholder="e.g., 25.5" step="0.1" required aria-label="Temperature in Celsius">
+                    <div class="error-message" id="temperature-error">Please enter a valid temperature (-50 to 50°C).</div>
+                </div>
+                <div class="form-group animate__animated animate__fadeIn animate-delay-12">
+                    <label for="humidity">Humidity (%) <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltip-text">Relative humidity (0-100%)</span></span></label>
+                    <input type="number" id="humidity" name="humidity" placeholder="e.g., 65.0" step="0.1" required aria-label="Humidity percentage">
+                    <div class="error-message" id="humidity-error">Please enter a valid humidity (0-100%).</div>
+                </div>
+                <div class="form-group animate__animated animate__fadeIn animate-delay-13">
+                    <label for="rainfall">Rainfall (mm) <span class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltip-text">Monthly rainfall amount</span></span></label>
+                    <input type="number" id="rainfall" name="rainfall" placeholder="e.g., 100.0" step="0.1" required aria-label="Rainfall in millimeters">
+                    <div class="error-message" id="rainfall-error">Please enter a valid rainfall amount (0-1000mm).</div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="animate__animated animate__fadeInUp animate-delay-14">
+                    Get Recommendation <i class="fas fa-seedling"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Create animated background particles
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const leavesContainer = document.getElementById('leaves');
+            const particleCount = 15;
+            const leafCount = 5;
+
+            // Create floating particles
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 10 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100 + 100}%`;
+                particle.style.animationDuration = `${Math.random() * 15 + 10}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                particlesContainer.appendChild(particle);
+            }
+
+            // Create floating leaves
+            for (let i = 0; i < leafCount; i++) {
+                const leaf = document.createElement('div');
+                leaf.classList.add('leaf');
+                const size = Math.random() * 20 + 20;
+                leaf.style.width = `${size}px`;
+                leaf.style.height = `${size}px`;
+                leaf.style.left = `${Math.random() * 100}%`;
+                leaf.style.top = `${Math.random() * 100 + 100}%`;
+                leaf.style.animationDuration = `${Math.random() * 20 + 15}s`;
+                leaf.style.animationDelay = `${Math.random() * 10}s`;
+                const leafIcons = ['🌱', '🍃', '🌿', '☘️'];
+                leaf.textContent = leafIcons[Math.floor(Math.random() * leafIcons.length)];
+                leavesContainer.appendChild(leaf);
+            }
+        });
+
+        // Range slider value display and update summary cards
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            const valueDisplay = document.getElementById(`${slider.id}-value`);
+            const summaryDisplay = document.getElementById(`display-${slider.id}`);
+            
+            // Initial display
+            const displayValue = slider.id === 'ph' ? parseFloat(slider.value).toFixed(1) : slider.value;
+            valueDisplay.textContent = displayValue;
+            if (summaryDisplay) summaryDisplay.textContent = slider.id === 'ph' ? displayValue : `${displayValue} ppm`;
+            
+            // Update on change
+            slider.addEventListener('input', function() {
+                const displayValue = this.id === 'ph' ? parseFloat(this.value).toFixed(1) : this.value;
+                valueDisplay.textContent = displayValue;
+                if (summaryDisplay) summaryDisplay.textContent = this.id === 'ph' ? displayValue : `${displayValue} ppm`;
+            });
+        });
+
+        // Update weather summary cards
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            const summaryDisplay = document.getElementById(`display-${input.id}`);
+            
+            // Initial display
+            if (summaryDisplay) {
+                const suffix = input.id === 'temperature' ? '°C' : input.id === 'humidity' ? '%' : 'mm';
+                summaryDisplay.textContent = input.value ? `${parseFloat(input.value).toFixed(1)}${suffix}` : `0.0${suffix}`;
+            }
+            
+            // Update on change
+            input.addEventListener('input', function() {
+                if (summaryDisplay) {
+                    const suffix = this.id === 'temperature' ? '°C' : this.id === 'humidity' ? '%' : 'mm';
+                    summaryDisplay.textContent = this.value ? `${parseFloat(this.value).toFixed(1)}${suffix}` : `0.0${suffix}`;
+                }
+            });
+        });
+
+        // Form validation and submission
+        document.getElementById('cropForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            // Validate range inputs
+            document.querySelectorAll('input[type="range"]').forEach(input => {
+                const errorElement = document.getElementById(`${input.id}-error`);
+                const value = parseFloat(input.value);
+                
+                if (isNaN(value) || 
+                    (input.id === 'ph' && (value < 0 || value > 14)) ||
+                    (input.id !== 'ph' && (value < 0 || value > 100))) {
+                    errorElement.style.display = 'block';
+                    isValid = false;
+                } else {
+                    errorElement.style.display = 'none';
+                }
+            });
+
+            // Validate number inputs
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                const errorElement = document.getElementById(`${input.id}-error`);
+                const value = parseFloat(input.value);
+                
+                if (isNaN(value) || 
+                    (input.id === 'temperature' && (value < -50 || value > 50)) ||
+                    (input.id === 'humidity' && (value < 0 || value > 100)) ||
+                    (input.id === 'rainfall' && (value < 0 || value > 1000))) {
+                    errorElement.style.display = 'block';
+                    isValid = false;
+                } else {
+                    errorElement.style.display = 'none';
+                }
+            });
+
+            if (isValid) {
+                const submitBtn = document.getElementById('submit-btn');
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Analyzing <i class="fas fa-spinner fa-spin"></i>';
+
+                setTimeout(() => {
+                    this.submit();
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>

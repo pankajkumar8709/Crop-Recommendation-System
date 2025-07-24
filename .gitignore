@@ -1,0 +1,39 @@
+# Ignore Python bytecode and cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Ignore virtual environment
+myenv/
+
+# Ignore Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore trained model files (optional)
+*.pkl
+
+# Ignore environment variables / secrets
+.env
+
+# Ignore log files and SQLite DBs (if any)
+*.log
+*.sqlite3
+*.db
+
+# Ignore system-specific files
+.DS_Store       # macOS
+Thumbs.db       # Windows
+
+# VS Code settings
+.vscode/
+
+# Ignore test cache
+pytest_cache/
+*.coverage
+.cache/
+
+# Ignore build artifacts (if any)
+build/
+dist/
+*.egg-info/

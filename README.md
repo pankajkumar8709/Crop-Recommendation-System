@@ -11,7 +11,7 @@ An AI-powered decision support system for small farm holders that recommends the
 - **Hemalatanaram**  
   Roll No: 24BCA070 | Regd No: 24UG040070  
 - **Jada Leela Prasanth**  
-  Roll No: 24CSE394 | Regd No: 24UG010179  
+  Roll No: 24ECE041 | Regd No: 24UG010179  
 
 ---
 

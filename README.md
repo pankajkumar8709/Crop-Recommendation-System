@@ -15,15 +15,15 @@ An AI-powered decision support system for small farm holders that recommends the
 
 # Table of Contents
 
- Project Overview](#-project-overview)
- Features](#-features)
- Tech Stack](#️-tech-stack)
- Input Parameters](#-input-parameters)
- How It Works](#️-how-it-works)
- Directory Structure](#-directory-structure)
- Sample Data](#-sample-data)
- Future Scope](#-future-scope)
- Contact](#-contact)
+ Project Overview
+ Features
+ Tech Stack
+ Input Parameters
+ How It Works
+ Directory Structure
+ Sample Data
+ Future Scope
+ Contact
 
 ---
 

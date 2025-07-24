@@ -50,6 +50,7 @@ Using machine learning, it delivers accurate and personalized recommendations fo
 - ✅ Local/offline-capable system  
 
 ---
+## Demo Video link(https://drive.google.com/file/d/1LJ8wAZwz9DeE9aY05mO1RGlJurrX3k3H/view?usp=sharing)
 
 ## 🧰 Tech Stack
 

@@ -5,7 +5,6 @@ from flask import render_template, request
 from portal import app
 import matplotlib.pyplot as plt
 
-# Ensure the charts directory exists at app startup
 import os
 charts_dir = os.path.join('static', 'charts')
 os.makedirs(charts_dir, exist_ok=True)
@@ -37,7 +36,6 @@ def recommend_fertilizer(crop, current_n, current_p, current_k):
 
     result = []
 
-    # Compare current values with recommended
     if current_n < recommended_n:
         result.append(f"Increase Nitrogen by {recommended_n - current_n} units.\n")
     elif current_n > recommended_n:
@@ -72,7 +70,7 @@ def result():
         import matplotlib.pyplot as plt
         import numpy as np
 
-        # Get form data
+        
         n = float(request.form['nitrogen'])
         p = float(request.form['phosphorus'])
         k = float(request.form['potassium'])
@@ -81,11 +79,11 @@ def result():
         ph = float(request.form['ph'])
         rainfall = float(request.form['rainfall'])
 
-        # Ensure chart directory exists
+       
         chart_dir = os.path.join(app.root_path, 'portal', 'static', 'charts')
         os.makedirs(chart_dir, exist_ok=True)
 
-        # === NPK Pie Chart ===
+       
         npk_labels = ['Nitrogen (N)', 'Phosphorus (P)', 'Potassium (K)']
         npk_values = [n, p, k]
         npk_colors = ['#2E8B57', '#3CB371', '#1F6B47']
@@ -100,7 +98,7 @@ def result():
         plt.savefig(npk_path, transparent=True)
         plt.close()
 
-        # === Weather Pie Chart ===
+        
         weather_labels = ['Temperature (°C)', 'Humidity (%)', 'Rainfall (mm)']
         weather_values = [temp + 50, humidity, rainfall / 10]
         weather_colors = ['#4682B4', '#3A6D99', '#4B5EAA']
@@ -115,7 +113,7 @@ def result():
         plt.savefig(weather_path, transparent=True)
         plt.close()
 
-        # === Prediction & Fertilizer Suggestion ===
+       
         data = np.array([[n, p, k, temp, humidity, ph, rainfall]], dtype=np.float32)
         try:
             prediction = model.predict(data)[0]
